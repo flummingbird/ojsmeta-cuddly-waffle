@@ -1,4 +1,5 @@
 import csv
+from lxml import etree
 from lxml.builder import E
 
 with open ('cwbr.csv', 'r') as csvfile:
@@ -19,10 +20,22 @@ with open ('cwbr.csv', 'r') as csvfile:
     for arts in csvData:
         issueDate = arts['Issue_date']
         issues[issueDate][arts['ID']]=arts
+        
+    def issuesxml(x):
+        result = []
+        for issue in x:
+            result.append(E("issue", issue))
+        return result
 
-    
+    xmloutput = E("issues", *issuesxml(issues))
+       # E.issues(
+        #    for issue in issues:
+         #       E.issue(
+          #      )
+        #)
+     #)   
+    print(etree.tostring(xmloutput, pretty_print=True))
 
-    
-    print (issues['Summer 2011']['4871'])      
+       
     
 
