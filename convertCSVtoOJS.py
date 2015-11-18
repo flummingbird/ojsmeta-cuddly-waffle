@@ -24,10 +24,17 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
     for key, value in issues.items():
         for k, art in value.items():
             art["Review"]=base64.b64encode(bytes(str(art["Review"]), 'utf-8'))
-            
-    xmlout = ET.Element("xmlout")
+
     for i in issues:
-        ET.SubElement(xmlout, i)
+        xmlout = ET.Element("issue")
+        filename = str(issues[issueDate])
+        filename = filename.replace('"', '').strip()
+        print (filename)
+    
+        #f = open("importfile" %filename, "w")
+        #f.write(ET.tostring(xmlout, encoding="Unicode"))
+        #f.close()
+        
 
 
 
