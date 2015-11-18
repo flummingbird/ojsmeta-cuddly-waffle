@@ -1,6 +1,5 @@
 import csv
-from lxml import etree
-from lxml.builder import E
+import xml.etree.ElementTree as ET
 
 with open ('cwbr.csv', 'r') as csvfile:
     reader = csv.DictReader(csvfile, delimiter='|')
@@ -27,14 +26,18 @@ with open ('cwbr.csv', 'r') as csvfile:
             result.append(E("issue", issue))
         return result
 
-    xmloutput = E("issues", *issuesxml(issues))
+    xmlout = ET.Element("xmlout")
+    for i in issues:
+        ET.SubElement(xmlout, i)
+
+    print (len(xmlout))
        # E.issues(
         #    for issue in issues:
          #       E.issue(
           #      )
         #)
      #)   
-    print(etree.tostring(xmloutput, pretty_print=True))
+    #print(etree.tostring(xmloutput, pretty_print=True))
 
        
     
