@@ -2,25 +2,24 @@ import csv
 import base64
 import xml.etree.ElementTree as ET
 
-with open ('cwbr.csv', 'r') as csvfile:
+with open ('cwbrSmallerSet.csv', 'r') as csvfile:
     reader = csv.DictReader(csvfile, delimiter='|')
     csvData = [blah for blah in reader]
-    issueDates = ["Fall 1999", "Summer 2007", "Winter 2013"]
-    #rows = []
-    #for row in csvData:
-    #    issueDates.append(row['Issue_date'])
-    #    rows.append(row)
-    #issueDates = set(issueDates)
+    issueDates = []
+    rows = []
+    for row in csvData:
+        issueDates.append(row['Issue_date'])
+        rows.append(row)
+    issueDates = set(issueDates)
 
     issues = {}
 
     for issueDate in issueDates:
-        issues[issueDate] = {}
+        issues[issueDate] = {} #makes an empty dic for each issue 
 
     for arts in csvData:
         issueDate = arts['Issue_date']
-        if issueDate in issueDates:
-            issues[issueDate][arts['ID']]=arts
+        issues[issueDate][arts['ID']]=arts
 
     for key, value in issues.items():
         for k, art in value.items():
