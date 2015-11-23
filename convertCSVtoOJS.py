@@ -31,9 +31,10 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
         issues[issueDate][section][arts['ID']]=arts
         
     #convert "Reviews" into base64 encoding
-    #for key, value in issues.items():
-    #   for k, art in value.items():
-    #       art["Review"]=base64.b64encode(bytes(str(art["Review"]), 'utf-8'))
+    for key, value in issues.items():
+        for sectionKey, sectionValue in value.items():
+            for articleKey, articleValue in sectionValue.items():
+                articleValue["Review"]=base64.b64encode(bytes(str(articleValue["Review"]), 'utf-8'))
 
     #create xml for each and output
     for filename in issueDates:
