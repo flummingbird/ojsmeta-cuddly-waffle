@@ -20,16 +20,20 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
     for arts in csvData:
         issueDate = arts['Issue_date']
         issues[issueDate][arts['ID']]=arts
+        
 
     for key, value in issues.items():
-        for k, art in value.items():
-            art["Review"]=base64.b64encode(bytes(str(art["Review"]), 'utf-8'))
+       for k, art in value.items():
+           art["Review"]=base64.b64encode(bytes(str(art["Review"]), 'utf-8'))
 
-    for i in issues:
-        xmlout = ET.Element("issue")
-        filename = str(issues[issueDate])
-        filename = filename.replace('"', '').strip()
-        print (filename)
+    for filename in issueDates:
+        output = "It works"
+        f = open(filename, "w")
+        f.write(output)
+        f.close()
+        #filename = str(issues[issueDate])
+        #filename = filename.replace('"', '').strip()
+        #print (filename)
     
         #f = open("importfile" %filename, "w")
         #f.write(ET.tostring(xmlout, encoding="Unicode"))
