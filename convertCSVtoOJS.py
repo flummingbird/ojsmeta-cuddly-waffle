@@ -6,37 +6,48 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
     reader = csv.DictReader(csvfile, delimiter='|')
     csvData = [blah for blah in reader]
     issueDates = []
-    rows = []
+    #rows = []
     for row in csvData:
         issueDates.append(row['Issue_date'])
-        rows.append(row)
+        #rows.append(row)
     issueDates = set(issueDates)
 
     issues = {}
 
     for issueDate in issueDates:
-        issues[issueDate] = {} #makes an empty dic for each issue 
+        issues[issueDate] = {} #makes an empty dic for each issue
+        sectionNames = []
+        #rows = []
+        for row in csvData:
+            if row['Issue_date'] == issueDate:
+                sectionNames.append(row['Record_type'])
+        sectionNames = set(sectionNames)
+        for section in sectionNames:
+            issues[issueDate][section] = {} #empty dict for each section
 
     for arts in csvData:
         issueDate = arts['Issue_date']
-        issues[issueDate][arts['ID']]=arts
+        section = arts['Record_type']
+        issues[issueDate][section][arts['ID']]=arts
         
+    #convert "Reviews" into base64 encoding
+    #for key, value in issues.items():
+    #   for k, art in value.items():
+    #       art["Review"]=base64.b64encode(bytes(str(art["Review"]), 'utf-8'))
 
-    for key, value in issues.items():
-       for k, art in value.items():
-           art["Review"]=base64.b64encode(bytes(str(art["Review"]), 'utf-8'))
-
+    #create xml for each and output
     for filename in issueDates:
-        output = "It works"
-        f = open(filename, "w")
-        f.write(output)
-        f.close()
-        #filename = str(issues[issueDate])
-        #filename = filename.replace('"', '').strip()
-        #print (filename)
-    
-        #f = open("importfile" %filename, "w")
-        #f.write(ET.tostring(xmlout, encoding="Unicode"))
+        xmlout = ET.Element("issue", {'current' : 'false', 'identification' : 'title', 'published' : 'false'})
+        title = ET.SubElement(xmlout, 'title')
+        title.text = filename
+        #sections = []
+        #for keys, articles in issues[issueDate]:
+         #   sections.append(articles['Record_type'])
+        #print (sections)
+        ET.dump(xmlout)
+        #output = ET.Element("issue")
+        #f = open(filename, "w")
+        #f.write(output)
         #f.close()
         
 
