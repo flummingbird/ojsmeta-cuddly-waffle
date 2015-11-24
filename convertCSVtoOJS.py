@@ -57,16 +57,43 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
                 article = ET.SubElement(section, 'article')
                 artTitle = ET.SubElement(article, 'title')
                 artTitle.text = artValue['Title']
+                abstract = ET.SubElement(article, 'abstract')
+                abstract.text = artValue['Headline'] + artValue['Sub_headline']
+                indexing = ET.SubElement(article, 'indexing')
+                subject = ET.SubElement(indexing, 'subject')
+                subject.text = artValue['Categories']
+                author = ET.SubElement(article, 'author')
+                firstname = ET.SubElement(author, 'firstname')
+                middlename = ET.SubElement(author, 'middlename')
+                middlename.text = '***'
+                lastname = ET.SubElement(author, 'lastname')
+                email = ET.SubElement(author, 'email')
+                email.text = '***'
+                if len(artValue['Reviewer']) < 4:
+                    firstname.text = '***'
+                    lastname.text = '***'
+                else:
+                    firstname.text = artValue['Reviewer'].split(',', 1)[1].strip() 
+                    lastname.text = artValue['Reviewer'].split(',', 1)[0].strip()
+                galley = ET.SubElement(article, 'galley')
+                label = ET.SubElement(galley, 'label')
+                label.text = 'HTML'
+                file = ET.SubElement(galley, 'file')
+                embed = ET.SubElement(file, 'embed', {'encoding':'base64','filename':'articletext'+artKey+'.html','mime_type':'text/html'})
+                embed.text = artValue['Review']
+                #output = str(ET.dump(xmlout))
+                #output.write(filename+'.xml')
+                #f = open(filename+'.xml', "w")
+                #f.write(output)
+                #f.close()
                 
         #sections = []
         #for keys, articles in issues[issueDate]:
          #   sections.append(articles['Record_type'])
         #print (sections)
-        ET.dump(xmlout)
+        #ET.dump(xmlout)
         #output = ET.Element("issue")
-        #f = open(filename, "w")
-        #f.write(output)
-        #f.close()
+      
         
 
 
