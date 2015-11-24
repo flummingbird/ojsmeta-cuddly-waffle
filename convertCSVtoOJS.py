@@ -80,19 +80,12 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
                 label.text = 'HTML'
                 file = ET.SubElement(galley, 'file')
                 embed = ET.SubElement(file, 'embed', {'encoding':'base64','filename':'articletext'+artKey+'.html','mime_type':'text/html'})
-                embed.text = artValue['Review']
-                #output = str(ET.dump(xmlout))
-                #output.write(filename+'.xml')
-                #f = open(filename+'.xml', "w")
-                #f.write(output)
-                #f.close()
-                
-        #sections = []
-        #for keys, articles in issues[issueDate]:
-         #   sections.append(articles['Record_type'])
-        #print (sections)
-        #ET.dump(xmlout)
-        #output = ET.Element("issue")
+                embed.text = str(artValue['Review'])
+                output = ET.tostring(xmlout, encoding="unicode")
+                f = open(filename+'.xml', "w")
+                f.write(output)
+                f.close()
+
       
         
 
