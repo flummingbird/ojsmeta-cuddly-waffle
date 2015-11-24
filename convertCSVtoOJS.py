@@ -53,6 +53,11 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
             section = ET.SubElement(xmlout, 'section')
             secTitle = ET.SubElement(section, 'title')
             secTitle.text = secKey
+            for artKey, artValue in issues[filename][secKey].items():
+                article = ET.SubElement(section, 'article')
+                artTitle = ET.SubElement(article, 'title')
+                artTitle.text = artValue['Title']
+                
         #sections = []
         #for keys, articles in issues[issueDate]:
          #   sections.append(articles['Record_type'])
