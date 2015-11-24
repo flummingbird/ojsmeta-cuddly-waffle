@@ -22,6 +22,7 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
             if row['Issue_date'] == issueDate:
                 sectionNames.append(row['Record_type'])
         sectionNames = set(sectionNames)
+        sectionNames.add('dateP') #date published is issue level metadata
         for section in sectionNames:
             issues[issueDate][section] = {} #empty dict for each section
 
@@ -29,10 +30,13 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
         issueDate = arts['Issue_date']
         section = arts['Record_type']
         issues[issueDate][section][arts['ID']]=arts
+        issues[issueDate]['dateP']=arts['Issue'] #adds date published
         
     #convert "Reviews" into base64 encoding
     for key, value in issues.items():
         for sectionKey, sectionValue in value.items():
+            if sectionKey == 'dateP':
+                break
             for articleKey, articleValue in sectionValue.items():
                 articleValue["Review"]=base64.b64encode(bytes(str(articleValue["Review"]), 'utf-8'))
 
@@ -41,6 +45,8 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
         xmlout = ET.Element("issue", {'current' : 'false', 'identification' : 'title', 'published' : 'false'})
         title = ET.SubElement(xmlout, 'title')
         title.text = filename
+        date_published = ET.SubElement(xmlout, 'date_published')
+        date_published.text = issues[filename]['dateP']
         #sections = []
         #for keys, articles in issues[issueDate]:
          #   sections.append(articles['Record_type'])
