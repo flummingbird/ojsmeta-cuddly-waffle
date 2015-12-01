@@ -64,14 +64,14 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
                 subject.text = artValue['Categories']
                 author = ET.SubElement(article, 'author')
                 firstname = ET.SubElement(author, 'firstname')
-                middlename = ET.SubElement(author, 'middlename')
-                middlename.text = '***'
+                #middlename = ET.SubElement(author, 'middlename')
+                #middlename.text = '
                 lastname = ET.SubElement(author, 'lastname')
                 email = ET.SubElement(author, 'email')
                 email.text = '***'
                 if len(artValue['Reviewer']) < 4:
-                    firstname.text = '***'
-                    lastname.text = '***'
+                    firstname.text = 'CWBR'
+                    lastname.text = 'Staff'
                 else:
                     firstname.text = artValue['Reviewer'].split(',', 1)[1].strip() 
                     lastname.text = artValue['Reviewer'].split(',', 1)[0].strip()
@@ -80,7 +80,7 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
                 label.text = 'HTML'
                 file = ET.SubElement(galley, 'file')
                 embed = ET.SubElement(file, 'embed', {'encoding':'base64','filename':'articletext'+artKey+'.html','mime_type':'text/html'})
-                embed.text = str(artValue['Review'])
+                embed.text = str(artValue['Review'])[2:-1]
                 output = ET.tostring(xmlout, encoding="unicode")
                 f = open(filename+'.xml', "w")
                 f.write(output)
