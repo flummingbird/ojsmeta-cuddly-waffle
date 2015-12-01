@@ -38,6 +38,7 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
             if sectionKey == 'dateP':
                 continue
             for articleKey, articleValue in sectionValue.items():
+                articleValue["Review"]="<h3>This is the isbn: " + articleValue["ISBN"] + "</h3><p>So that means other values can go here too.</p>" + articleValue["Review"]
                 articleValue["Review"]=base64.b64encode(bytes(str(articleValue["Review"]), 'utf-8'))
 
     #create xml for each and output
@@ -56,7 +57,7 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
             for artKey, artValue in issues[filename][secKey].items():
                 article = ET.SubElement(section, 'article')
                 artTitle = ET.SubElement(article, 'title')
-                artTitle.text = artValue['Title']
+                artTitle.text = artValue['Title'] + " by " + artValue['Auth_1']
                 abstract = ET.SubElement(article, 'abstract')
                 abstract.text = artValue['Headline'] + artValue['Sub_headline']
                 indexing = ET.SubElement(article, 'indexing')
