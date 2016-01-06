@@ -4,34 +4,33 @@ import xml.etree.ElementTree as ET
 
 with open ('cwbrSmallerSet.csv', 'r') as csvfile:
     reader = csv.DictReader(csvfile, delimiter='|')
-    csvData = [blah for blah in reader]
-    issueDates = []
-    #rows = []
-    for row in csvData:
-        issueDates.append(row['Issue_date'])
-        #rows.append(row)
-    issueDates = set(issueDates)
+    csvData = [item for item in reader]
+    quarters_present = set()
+    for article in csvData:
+        quarters_present.add(article['Issue_date'])
 
     issues = {}
 
-    for issueDate in issueDates:
-        issues[issueDate] = {} #makes an empty dic for each issue
-        sectionNames = []
-        #rows = []
-        for row in csvData:
-            if row['Issue_date'] == issueDate:
-                sectionNames.append(row['Record_type'])
-        sectionNames = set(sectionNames)
-        sectionNames.add('dateP') #date published is issue level metadata
-        for section in sectionNames:
-            issues[issueDate][section] = {} #empty dict for each section
-
-    for arts in csvData:
-        issueDate = arts['Issue_date']
-        section = arts['Record_type']
-        issues[issueDate][section][arts['ID']]=arts
-        issues[issueDate]['dateP']=arts['Issue'] #adds date published
+    for quarter in quarters_present:
+        issues[quarter] = {} #makes an empty dic for each issue
+        sections_present = set()
+        for article in csvData:
+            if article['Issue_date'] == quarter:
+                sections_present.add(article['Record_type'])
+        sections_present.add('dateP') #date published is issue level metadata
+        for section in sections_present:
+            issues[quarter][section] = {} #empty dict for each section
         
+    for article in csvData:
+        quarter = article['Issue_date']
+        section = article['Record_type']
+        article_id = article['ID']
+        issues[quarter][section][article_id] = article
+        issues[quarter]['dateP'] = article['Issue']
+        # issues format is now {Quarter: {dateP: day_of_issue, Section: {article key, article value}}}
+# End of code review on Jan 6th    
+    
+
     #convert "Reviews" into base64 encoding
     for key, value in issues.items():
         for sectionKey, sectionValue in value.items():
@@ -42,7 +41,7 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
                 articleValue["Review"]=base64.b64encode(bytes(str(articleValue["Review"]), 'utf-8'))
 
     #create xml for each and output
-    for filename in issueDates:
+    for filename in quarters_present:
         xmlout = ET.Element("issue", {'current' : 'false', 'identification' : 'title', 'published' : 'false'})
         title = ET.SubElement(xmlout, 'title')
         title.text = filename
@@ -88,10 +87,4 @@ with open ('cwbrSmallerSet.csv', 'r') as csvfile:
                 f.close()
 
       
-        
-
-
-
-       
     
-
